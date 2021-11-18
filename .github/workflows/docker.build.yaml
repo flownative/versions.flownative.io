@@ -1,0 +1,69 @@
+name: Update PHP versions
+on:
+  repository_dispatch:
+    types: [ beach-php-images-built ]
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: 'main'
+
+      - name: Determine latest built Beach PHP 7.3 version
+        id: latest_php_73_version
+        uses: flownative/action-docker-get-label@master
+        with:
+          image: europe-docker.pkg.dev/flownative/docker/beach-php:7.3
+          label: org.opencontainers.image.version
+          registry_endpoint: https://europe-docker.pkg.dev
+          registry_username: '_json_key'
+          registry_password: ${{ secrets.GOOGLE_ARTIFACTS_PASSWORD_DOCKER }}
+
+      - name: Determine latest built Beach PHP 7.4 version
+        id: latest_php_74_version
+        uses: flownative/action-docker-get-label@master
+        with:
+          image: europe-docker.pkg.dev/flownative/docker/beach-php:7.4
+          label: org.opencontainers.image.version
+          registry_endpoint: https://europe-docker.pkg.dev
+          registry_username: '_json_key'
+          registry_password: ${{ secrets.GOOGLE_ARTIFACTS_PASSWORD_DOCKER }}
+
+      - name: Determine latest built Beach PHP 8.0 version
+        id: latest_php_80_version
+        uses: flownative/action-docker-get-label@master
+        with:
+          image: europe-docker.pkg.dev/flownative/docker/beach-php:8.0
+          label: org.opencontainers.image.version
+          registry_endpoint: https://europe-docker.pkg.dev
+          registry_username: '_json_key'
+          registry_password: ${{ secrets.GOOGLE_ARTIFACTS_PASSWORD_DOCKER }}
+
+      - name: Update version files
+        run: |
+          echo "${{ steps.latest_php_73_version.outputs.value }}" > projects/beach/channels/stable/versions/beach-php-7_3.txt
+          echo "${{ steps.latest_php_74_version.outputs.value }}" > projects/beach/channels/stable/versions/beach-php-7_4.txt
+          echo "${{ steps.latest_php_80_version.outputs.value }}" > projects/beach/channels/stable/versions/beach-php-7_0.txt
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: Update PHP versions
+          signoff: false
+          branch: version-updates
+          delete-branch: true
+          title: 'Update PHP versions'
+          body: |
+            This updates PHP to the following versions:
+            - ${{ steps.latest_php_73_version.outputs.value }}
+            - ${{ steps.latest_php_74_version.outputs.value }}
+            - ${{ steps.latest_php_80_version.outputs.value }}
+          labels: |
+            automated pr
+          team-reviewers: |
+            flownative/operations
