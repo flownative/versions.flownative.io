@@ -49,6 +49,9 @@ jobs:
           echo "${{ steps.latest_php_73_version.outputs.value }}" > projects/beach/channels/stable/versions/beach-php-7_3.txt
           echo "${{ steps.latest_php_74_version.outputs.value }}" > projects/beach/channels/stable/versions/beach-php-7_4.txt
           echo "${{ steps.latest_php_80_version.outputs.value }}" > projects/beach/channels/stable/versions/beach-php-8_0.txt
+          echo "${{ steps.latest_php_73_version.outputs.value }}" > projects/beach/channels/beta/versions/beach-php-7_3.txt
+          echo "${{ steps.latest_php_74_version.outputs.value }}" > projects/beach/channels/beta/versions/beach-php-7_4.txt
+          echo "${{ steps.latest_php_80_version.outputs.value }}" > projects/beach/channels/beta/versions/beach-php-8_0.txt
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
