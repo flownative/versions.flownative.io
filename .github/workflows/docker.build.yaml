@@ -78,7 +78,7 @@ jobs:
           echo "${{ steps.latest_php_82_version.outputs.value }}" > projects/beach/channels/beta/versions/beach-php-8_2.txt
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v4
         with:
           commit-message: Update PHP versions
           signoff: false
