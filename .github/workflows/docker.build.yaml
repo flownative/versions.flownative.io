@@ -95,4 +95,4 @@ jobs:
           labels: |
             automated pr
           team-reviewers: |
-            flownative/operations
+            operations
