@@ -16,7 +16,7 @@ jobs:
 
       - name: Determine latest built Beach PHP 8.1 version
         id: latest_php_81_version
-        uses: flownative/action-docker-get-label@master
+        uses: flownative/action-docker-get-label@v1
         with:
           image: europe-docker.pkg.dev/flownative/docker/beach-php:8.1
           label: org.opencontainers.image.version
@@ -26,7 +26,7 @@ jobs:
 
       - name: Determine latest built Beach PHP 8.2 version
         id: latest_php_82_version
-        uses: flownative/action-docker-get-label@master
+        uses: flownative/action-docker-get-label@v1
         with:
           image: europe-docker.pkg.dev/flownative/docker/beach-php:8.2
           label: org.opencontainers.image.version
@@ -36,9 +36,19 @@ jobs:
 
       - name: Determine latest built Beach PHP 8.3 version
         id: latest_php_83_version
-        uses: flownative/action-docker-get-label@master
+        uses: flownative/action-docker-get-label@v1
         with:
           image: europe-docker.pkg.dev/flownative/docker/beach-php:8.3
+          label: org.opencontainers.image.version
+          registry_endpoint: https://europe-docker.pkg.dev
+          registry_username: '_json_key'
+          registry_password: ${{ secrets.GOOGLE_ARTIFACTS_PASSWORD_DOCKER }}
+
+      - name: Determine latest built Beach PHP 8.4 version
+        id: latest_php_84_version
+        uses: flownative/action-docker-get-label@v1
+        with:
+          image: europe-docker.pkg.dev/flownative/docker/beach-php:8.4
           label: org.opencontainers.image.version
           registry_endpoint: https://europe-docker.pkg.dev
           registry_username: '_json_key'
@@ -49,9 +59,11 @@ jobs:
           echo "${{ steps.latest_php_81_version.outputs.value }}" > projects/beach/channels/stable/versions/beach-php-8_1.txt
           echo "${{ steps.latest_php_82_version.outputs.value }}" > projects/beach/channels/stable/versions/beach-php-8_2.txt
           echo "${{ steps.latest_php_83_version.outputs.value }}" > projects/beach/channels/stable/versions/beach-php-8_3.txt
+          echo "${{ steps.latest_php_84_version.outputs.value }}" > projects/beach/channels/stable/versions/beach-php-8_4.txt
           echo "${{ steps.latest_php_81_version.outputs.value }}" > projects/beach/channels/beta/versions/beach-php-8_1.txt
           echo "${{ steps.latest_php_82_version.outputs.value }}" > projects/beach/channels/beta/versions/beach-php-8_2.txt
           echo "${{ steps.latest_php_83_version.outputs.value }}" > projects/beach/channels/beta/versions/beach-php-8_3.txt
+          echo "${{ steps.latest_php_84_version.outputs.value }}" > projects/beach/channels/beta/versions/beach-php-8_4.txt
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
@@ -66,6 +78,7 @@ jobs:
             - ${{ steps.latest_php_81_version.outputs.value }}
             - ${{ steps.latest_php_82_version.outputs.value }}
             - ${{ steps.latest_php_83_version.outputs.value }}
+            - ${{ steps.latest_php_84_version.outputs.value }}
           labels: |
             automated pr
           reviewers: |
