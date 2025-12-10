@@ -54,16 +54,28 @@ jobs:
           registry_username: '_json_key'
           registry_password: ${{ secrets.GOOGLE_ARTIFACTS_PASSWORD_DOCKER }}
 
+      - name: Determine latest built Beach PHP 8.5 version
+        id: latest_php_85_version
+        uses: flownative/action-docker-get-label@v1
+        with:
+          image: europe-docker.pkg.dev/flownative/docker/beach-php:8.5
+          label: org.opencontainers.image.version
+          registry_endpoint: https://europe-docker.pkg.dev
+          registry_username: '_json_key'
+          registry_password: ${{ secrets.GOOGLE_ARTIFACTS_PASSWORD_DOCKER }}
+
       - name: Update version files
         run: |
           echo "${{ steps.latest_php_81_version.outputs.value }}" > projects/beach/channels/stable/versions/beach-php-8_1.txt
           echo "${{ steps.latest_php_82_version.outputs.value }}" > projects/beach/channels/stable/versions/beach-php-8_2.txt
           echo "${{ steps.latest_php_83_version.outputs.value }}" > projects/beach/channels/stable/versions/beach-php-8_3.txt
           echo "${{ steps.latest_php_84_version.outputs.value }}" > projects/beach/channels/stable/versions/beach-php-8_4.txt
+          echo "${{ steps.latest_php_85_version.outputs.value }}" > projects/beach/channels/stable/versions/beach-php-8_5.txt
           echo "${{ steps.latest_php_81_version.outputs.value }}" > projects/beach/channels/beta/versions/beach-php-8_1.txt
           echo "${{ steps.latest_php_82_version.outputs.value }}" > projects/beach/channels/beta/versions/beach-php-8_2.txt
           echo "${{ steps.latest_php_83_version.outputs.value }}" > projects/beach/channels/beta/versions/beach-php-8_3.txt
           echo "${{ steps.latest_php_84_version.outputs.value }}" > projects/beach/channels/beta/versions/beach-php-8_4.txt
+          echo "${{ steps.latest_php_85_version.outputs.value }}" > projects/beach/channels/beta/versions/beach-php-8_5.txt
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
@@ -79,6 +91,7 @@ jobs:
             - ${{ steps.latest_php_82_version.outputs.value }}
             - ${{ steps.latest_php_83_version.outputs.value }}
             - ${{ steps.latest_php_84_version.outputs.value }}
+            - ${{ steps.latest_php_85_version.outputs.value }}
           labels: |
             automated pr
           reviewers: |
