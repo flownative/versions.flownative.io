@@ -10,13 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: 'main'
 
       - name: Determine latest built Beach PHP 8.1 version
         id: latest_php_81_version
-        uses: flownative/action-docker-get-label@v1
+        uses: flownative/action-docker-get-label@v1.0.1
         with:
           image: europe-docker.pkg.dev/flownative/docker/beach-php:8.1
           label: org.opencontainers.image.version
@@ -26,7 +26,7 @@ jobs:
 
       - name: Determine latest built Beach PHP 8.2 version
         id: latest_php_82_version
-        uses: flownative/action-docker-get-label@v1
+        uses: flownative/action-docker-get-label@v1.0.1
         with:
           image: europe-docker.pkg.dev/flownative/docker/beach-php:8.2
           label: org.opencontainers.image.version
@@ -36,7 +36,7 @@ jobs:
 
       - name: Determine latest built Beach PHP 8.3 version
         id: latest_php_83_version
-        uses: flownative/action-docker-get-label@v1
+        uses: flownative/action-docker-get-label@v1.0.1
         with:
           image: europe-docker.pkg.dev/flownative/docker/beach-php:8.3
           label: org.opencontainers.image.version
@@ -46,7 +46,7 @@ jobs:
 
       - name: Determine latest built Beach PHP 8.4 version
         id: latest_php_84_version
-        uses: flownative/action-docker-get-label@v1
+        uses: flownative/action-docker-get-label@v1.0.1
         with:
           image: europe-docker.pkg.dev/flownative/docker/beach-php:8.4
           label: org.opencontainers.image.version
@@ -56,7 +56,7 @@ jobs:
 
       - name: Determine latest built Beach PHP 8.5 version
         id: latest_php_85_version
-        uses: flownative/action-docker-get-label@v1
+        uses: flownative/action-docker-get-label@v1.0.1
         with:
           image: europe-docker.pkg.dev/flownative/docker/beach-php:8.5
           label: org.opencontainers.image.version
@@ -78,7 +78,7 @@ jobs:
           echo "${{ steps.latest_php_85_version.outputs.value }}" > projects/beach/channels/beta/versions/beach-php-8_5.txt
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: Update PHP versions
           signoff: false
